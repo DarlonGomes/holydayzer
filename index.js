@@ -22,3 +22,18 @@ app.get("/holidays", (request, response) =>{
     response.send(holidays)
 });
 
+app.get("/is-today-holiday", (request, response)=>{
+    let itsHoliday = false;
+    const today = new Date();
+    const [month, day, year] = today.toLocaleDateString().split("/");
+    for(let i =0; i < holidays.length; i++){
+        let [forMonth, forDay, forYear] = holidays[i].date.split("/");
+        if(day === forDay && month === forMonth  && year === forYear){
+            response.send(`Sim, hoje é ${holidays[i].name}`);
+            return;
+        }
+    }
+    response.send("Não, hoje não é feriado.")
+});
+
+app.listen(5000);
