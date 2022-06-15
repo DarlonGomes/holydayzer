@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { request } from 'express';
 import cors from 'cors';
 
 const app = express();
@@ -35,5 +35,27 @@ app.get("/is-today-holiday", (request, response)=>{
     }
     response.send("Não, hoje não é feriado.")
 });
+
+app.get("/holidays/:month", (request, response) =>{
+    const month = request.params.month;
+    const holiday = []
+    const value = [];
+    for(let i = 0; i < holidays.length; i++){
+        let [forMonth, forDay, forYear] = holidays[i].date.split("/");
+        if(month === forMonth){
+            const dayName = holidays[i].name;
+            const day = holidays[i].date;
+            holiday.push(dayName);
+            value.push(day)
+        }
+    }
+    if(value.length === 1){
+        response.send(`Nesse mês teremos ${holiday} no dia ${value}`)
+    }
+
+    if(value.length !== 1){
+        response.send(`Nesse mês teremos ${holiday[0]} no dia ${value[0]} e ${holiday[1]} no dia ${value[1]}`)
+    }
+})
 
 app.listen(5000);
